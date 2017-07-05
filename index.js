@@ -38,8 +38,8 @@ module.exports = class KuduClient {
                 command,
                 dir: cwd
             }
-        }).then(({ Error: error, ExitCode, Output}) => {
-            if (ExitCode > 0 || error) {
+        }).then(({ Error: error, ExitCode, Output }) => {
+            if (ExitCode > 0) {
                 throw new Error(error);
             }
             

@@ -6,6 +6,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "az-login": "^0.2.3"
+    "az-login": "^0.3.0"
   }
 }
