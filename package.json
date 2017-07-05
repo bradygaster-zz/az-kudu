@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Jonathan Carter",
   "license": "MIT",
+  "scripts": {
+    "test": "node examples/index.js"
+  },
   "engines": {
     "node": ">=6.9.0"
   },

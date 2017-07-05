@@ -2,12 +2,15 @@ const ROOT_DIRECTORY = "site/wwwroot";
 
 module.exports = class KuduClient {
     constructor(credentials, subscriptionId, webAppName) {
+        this._accessToken = credentials.tokenCache._entries[0].accessToken;
         this._kuduApiUrl = `https://${webAppName}.scm.azurewebsites.net/api`; 
+    }
 
-        const accessToken = credentials.tokenCache._entries[0].accessToken;
+    addUserAgentInfo(userAgent) {
         const defaults = {
             headers: {
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${this._accessToken}`,
+                "User-Agent": userAgent
             }
         };
         
@@ -35,6 +38,12 @@ module.exports = class KuduClient {
                 command,
                 dir: cwd
             }
+        }).then(({ Error: error, ExitCode, Output}) => {
+            if (ExitCode > 0 || error) {
+                throw new Error(error);
+            }
+            
+            return Output;
         });
     }
 
