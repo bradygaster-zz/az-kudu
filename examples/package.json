@@ -1,11 +1,14 @@
 {
-  "name": "examples",
+  "name": "az-kudu-sample",
   "version": "1.0.0",
-  "description": "",
+  "description": "A sample usage of the az-kudu module",
   "main": "index.js",
-  "author": "",
-  "license": "ISC",
+  "author": "Jonathan Carter",
+  "license": "MIT",
   "dependencies": {
     "az-login": "^0.3.0"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

@@ -41,10 +41,58 @@ The `az-kudu` module exports a single object, which represents the factory metho
 
 ## deleteFile
 
+```javascript
+deleteFile(filePath: string): Promise<void>
+```
+
+Deletes a remote file within the currently deployed Web App instance. The specified `filePath` is relative to the app's root directory (e.g. `server.js` as oppposed to `D:\site\wwwroot\server.js`), which allows clients to ignore the filesystem specifics of the Linux and/or Windows Web Apps runtime environment.
+
+The returned `Promise` will resolve if the file was successfully deleted. Otherwise, it will be rejected with the appropriate error message.
+
 ## getFileContents
+
+```javascript
+getFileContents(filePath: string): Promise<string>
+```
+
+Returns the contents of a remote file, as it exists in the currently deployed Web App instance (as opposed to on your local machine, in source control, etc.). The specified `filePath` is relative to the app's root directory (e.g. `server.js` as oppposed to `D:\site\wwwroot\server.js`), which allows clients to ignore the filesystem specifics of the Linux and/or Windows Web Apps runtime environment.
+
+If the specified value exists on the server, then the returned `Promise` will resolve to a `string` whose value is its contents. Otherwise, the `Promise` will be rejected.
 
 ## openLogStream
 
+```javascript
+openLogStream(): stream.Readable
+```
+
+Returns a [`stream.Readable`](https://nodejs.org/api/stream.html#stream_class_stream_readable) which provides real-time access to the Web App instance's `stdout` stream.
+
 ## runCommand
 
-## uploadZip
+```javascript
+runCommand(command: string, cwd?: string): Promise<string>
+```
+
+Executes a shell command within the context of the remote Web App environment (e.g. the hosting VM). By default, the specified command will be executed within the app's root directory, however, you can customize this behavior by setting the optional `cwd` argument (e.g. in order to run `ls` in a sub-directory of the app).
+
+If the command executes successfully (i.e. it exits with a status code of `0`), then the returned `Promise` will resolve to the contents of the command's `stdout` stream. Otherwise, the `Promise` will be rejected with the failure reason (e.g. the specified command doesn't exist).
+
+> Note: The output of the specified shell command is buffered on the server, as opposed to streamed.
+
+## uploadDirectory
+
+```javascript
+uploadZip(directory: string = process.cwd(), remoteDirectory?: string): Promise<void>
+```
+
+Uploads to the contents of a local directory to the remote Web App instance. By default, the `directory` will zip up the contents of the `cwd` and upload it to the root of the Web App. However, both the local and remote directories can be customized (e.g. in order to upload an arbitrary directory to an arbitrary location on your Web App's filesystem).
+
+The returned `Promise` is resolved/rejected based on the success of the upload operation.
+
+## uploadZipFile
+
+```javascript
+uploadZip(zipFilePath, remoteDirectory?: string): Promise<void>
+```
+
+Similar to the `uploadDirectory` method, however, instead of zipping up a directory for you, this method allows you to upload an existing zip file to your remote Web App instance (e.g. because you generated it via other means).
